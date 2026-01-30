@@ -1,0 +1,97 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# 1. Contextualização do Projeto (Responsabilidade: Dupla 3)\n",
+    "\n",
+    "**Nome do Projeto:** Google LangExtract  \n",
+    "**Repositório Oficial:** https://github.com/google/langextract\n",
+    "\n",
+    "## Descrição\n",
+    "O **LangExtract** é uma biblioteca Python avançada desenvolvida para extração de dados estruturados a partir de textos não estruturados, utilizando **Grandes Modelos de Linguagem (LLMs)**. Seu diferencial técnico é o mecanismo de **Source Grounding**, que garante que cada extração cite a fonte exata no texto original, aumentando significativamente a confiabilidade da IA.\n",
+    "\n",
+    "## Stack Tecnológica\n",
+    "- Linguagem: **Python (3.10+)**\n",
+    "- Orquestração de testes: **Tox**\n",
+    "- Integração Contínua e Deploy: **GitHub Actions**\n",
+    "\n",
+    "## Relevância\n",
+    "A escolha deste projeto se deve à sua arquitetura de **Governança por Código**. Mantido pelo Google, o LangExtract exemplifica um padrão de maturidade **Enterprise aplicado ao Open Source**, no qual a qualidade do software não depende de revisão humana inicial, mas sim de **barreiras automatizadas rigorosas**."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# 3. Discussão dos Achados e Diagnóstico de Riscos (Responsabilidade: Dupla 3)\n",
+    "\n",
+    "Com base na investigação técnica da **Dupla 1** e no mapeamento de processos da **Dupla 2**, diagnosticamos que o projeto adota uma estratégia de **CI/CD de Alta Maturidade**, caracterizada pela filosofia de **Shift-Left Testing** — testar o mais cedo possível no ciclo de desenvolvimento."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## 3.1. Análise da Estrutura de Automação\n",
+    "\n",
+    "Diferentemente de projetos que apenas executam testes básicos, o LangExtract implementa um verdadeiro **Pipeline de Governança**. Conforme evidenciado no fluxo de contribuição, um **Pull Request (PR)** não pode sequer ser avaliado por um humano sem passar por **três camadas de validação automática**:\n",
+    "\n",
+    "### Camada de Compliance (Legal & Administrativo)\n",
+    "- Uso dos workflows `check-linked-issue.yml` e `google-cla`\n",
+    "- Elimina riscos legais de contribuições sem licença\n",
+    "- Evita código órfão (PRs sem issue associada)\n",
+    "\n",
+    "### Camada de Qualidade de Código (Linting)\n",
+    "- Integração com **pre-commit** e **format-check**\n",
+    "- Remove discussões subjetivas sobre estilo de código\n",
+    "- Permite que revisores humanos foquem na lógica da aplicação\n",
+    "\n",
+    "### Camada de Integridade (Testes Matriciais)\n",
+    "- Execução de testes via **tox** em Python **3.10, 3.11 e 3.12**\n",
+    "- Mitiga o risco de incompatibilidade de ambiente\n",
+    "- Garante funcionamento consistente para diferentes usuários finais"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## 3.2. Riscos e Pontos de Atenção\n",
+    "\n",
+    "Apesar da robustez da estratégia adotada, foram identificados alguns gargalos inerentes a esse nível de rigor:\n",
+    "\n",
+    "### Risco de Barreira de Entrada (Onboarding Complexo)\n",
+    "A grande quantidade de travas de governança gera um atrito inicial elevado. Contribuidores ocasionais podem desistir de submeter PRs ao se depararem com falhas de CI relacionadas a requisitos burocráticos — como ausência de issue vinculada ou falta de assinatura do CLA — e não a erros no código propriamente dito.\n",
+    "\n",
+    "### Dependência de Serviços Externos\n",
+    "A presença de testes de integração com IA (`ollama-integration`) introduz um **Risco de Flakiness**. Caso a API do modelo de linguagem apresente lentidão ou comportamento inesperado, o pipeline pode falhar mesmo com o código correto, bloqueando merges ou deploys urgentes.\n",
+    "\n",
+    "### Custo de Tempo de Build\n",
+    "A execução de uma matriz de testes para múltiplas versões do Python aumenta o tempo total do pipeline. Embora aumente a segurança, isso impacta o **Lead Time**, elevando o intervalo entre o commit e a liberação para merge."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## 3.3. Conclusão do Diagnóstico\n",
+    "\n",
+    "O cenário atual do projeto é **Altamente Seguro**. A probabilidade de regressões — introdução de novos bugs em funcionalidades existentes — é mínima devido à automação extensiva. O LangExtract prioriza **Estabilidade e Conformidade** em detrimento da velocidade de contribuição, uma decisão arquitetural coerente com bibliotecas utilizadas em **ambientes corporativos críticos**."
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "name": "python"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}
